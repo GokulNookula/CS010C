@@ -138,33 +138,23 @@ void Playlist::AddSong()
 
 void Playlist::RemoveSong()
 {
-    string userUniqueID;
+    string userUniqueID;    
 
     cout << "REMOVE SONG" << endl;
     cout << "Enter song's unique ID:" << endl;
     cin >> userUniqueID;
 
-    if (head != nullptr)
-    {
-        PlaylistNode* prev = nullptr;
-        PlaylistNode* curr = head;
+    PlaylistNode* previousNode = head;
 
-        for (PlaylistNode* curr = head; curr != nullptr; curr = curr->GetNext())
+    for (PlaylistNode* currentNode = head->GetNext(); currentNode != nullptr; currentNode = currentNode->GetNext())
+    {
+        if (currentNode->GetID() == userUniqueID)
         {
-            if (curr->GetID() == userUniqueID)
-            {
-                cout << "\"" << curr->GetSongName() << "\" removed." << endl;
-                if (prev == nullptr) // if we have current as head
-                {
-                    head = curr->GetNext();
-                }
-                else // we are setting previous node value to the next value from the current thus skipping the current one to delete it
-                {
-                    prev->SetNext(curr->GetNext());
-                }
-                delete curr;
-                prev = curr;
-            }
+            cout << "\"" << currentNode->GetSongName() << "\" removed." << endl;
+            PlaylistNode* temp = currentNode;
+            previousNode->SetNext(currentNode->GetNext());
+            delete temp;
+            currentNode = previousNode->GetNext();
         }
     }
 }
