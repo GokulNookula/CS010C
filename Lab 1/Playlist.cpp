@@ -146,14 +146,24 @@ void Playlist::RemoveSong()
 
     if (head != nullptr)
     {
-        for (PlaylistNode* i = head; i != nullptr; i = i->GetNext())
+        PlaylistNode* prev = nullptr;
+        PlaylistNode* curr = head;
+
+        for (PlaylistNode* curr = head; curr != nullptr; curr = curr->GetNext())
         {
-            if (i->GetID() == userUniqueID)
+            if (curr->GetID() == userUniqueID)
             {
-                cout << "\"" << i->GetSongName() << "\" removed." << endl;
-                PlaylistNode* temp = i->GetNext();
-                delete i;
-                i = temp;
+                cout << "\"" << curr->GetSongName() << "\" removed." << endl;
+                if (prev == nullptr) // if we have current as head
+                {
+                    head = curr->GetNext();
+                }
+                else // we are setting previous node value to the next value from the current thus skipping the current one to delete it
+                {
+                    prev->SetNext(curr->GetNext());
+                }
+                delete curr;
+                prev = curr;
             }
         }
     }
