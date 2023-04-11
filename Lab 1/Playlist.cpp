@@ -162,6 +162,7 @@ void Playlist::RemoveSong()
 void Playlist::OutputTotalTime()
 {
     int total = 0;
+    cout << "OUTPUT TOTAL TIME OF PLAYLIST (IN SECONDS)" << endl;
 
     for (PlaylistNode* i = head; i != nullptr; i = i->GetNext())
     {
