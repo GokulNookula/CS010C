@@ -170,7 +170,7 @@ void Playlist::OutputTotalTime()
     cout << "Total time: " << total << " seconds" << endl;
 }
 
-void Playlist::OutputSongsSpecificArtist()
+void Playlist::OutputSongsSpecificArtist() //fix me
 {
     string userArtistName;
     int count = 1;
@@ -194,25 +194,36 @@ void Playlist::OutputSongsSpecificArtist()
     }
 }
 
-void Playlist::ChangePosition()
+void Playlist::ChangePosition() 
 {
     int oldPos;
     int newPos;
+    int length = 0;
 
     cout << "CHANGE POSITION OF SONG" << endl;
-    cout << "Enter song's current position: " << endl;
+    cout << "Enter song's current position:" << endl;
     cin >> oldPos;
-    cout << "Enter new position for song: " << endl;
+    cout << "Enter new position for song:" << endl;
     cin >> newPos;
 
     if (head == nullptr)
     {
         return;
     }
+
+    for (PlaylistNode* i = head; i != nullptr; i = i->GetNext())
+    {
+        length++;
+    }
+    if (oldPos < 1 || oldPos > length || newPos < 1 || newPos > length)
+    {
+        cout << "Invalid position entered." << endl;
+        return;
+    }
+
     PlaylistNode* prev = nullptr;
     PlaylistNode* curr = head;
-
-    for (int i = 0; i < oldPos && curr != nullptr; i++)
+    for (int i = 1; i < oldPos; i++)
     {
         prev = curr;
         curr = curr->GetNext();
@@ -234,27 +245,25 @@ void Playlist::ChangePosition()
         }
         PlaylistNode* previousNewNode = nullptr;
         PlaylistNode* currNode = head;
-        
-        for (int i  = 1; i < newPos && currNode != nullptr; i++)
+        for (int i = 1; i < newPos; i++)
         {
             previousNewNode = currNode;
             currNode = currNode->GetNext();
         }
-
         if (previousNewNode == nullptr)
         {
-            currNode->SetNext(head);
-            head = currNode;
+            curr->SetNext(head);
+            head = curr;
         }
         else
         {
-            previousNewNode->InsertAfter(currNode);
+            previousNewNode->InsertAfter(curr);
         }
         if (currNode == nullptr)
         {
-            tail = currNode;
+            tail = curr;
         }
-        cout << "\"" << curr->GetSongName() << " moved to position " << newPos << endl;
+        cout << "\"" << curr->GetSongName() << "\" moved to position " << newPos << endl;
     }
     else
     {
