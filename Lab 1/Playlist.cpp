@@ -125,8 +125,8 @@ void Playlist::AddSong()
     PlaylistNode* newNode = new PlaylistNode(newUniqueID,newSongName,newArtistName,newSongLength);
     if (head == nullptr)
     {
-        head = newNode;
         tail = newNode;
+        head = tail;
     }
     else
     {
@@ -177,8 +177,10 @@ void Playlist::OutputSongsSpecificArtist() //fix me
     int count = 1;
 
     cout << "OUTPUT SONGS BY SPECIFIC ARTIST" << endl;
-    cout << "Enter artist's name" << endl;
-    cin >> userArtistName;
+    cout << "Enter artist's name:" << endl;
+    cin.ignore();
+    getline(cin,userArtistName);
+    cout << endl;
 
     if (head != nullptr)
     {
@@ -189,8 +191,8 @@ void Playlist::OutputSongsSpecificArtist() //fix me
                 cout << count << "." << endl;
                 i->PrintPlaylistNode();
                 cout << endl;
-                count++;
             }
+            count++;
         }   
     }
 }
