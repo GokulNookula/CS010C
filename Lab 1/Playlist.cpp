@@ -94,6 +94,50 @@ Playlist::~Playlist()
     }
 }
 
+// Copy assignment operator for Playlist
+Playlist& Playlist::operator=(const Playlist& other)
+{
+    // Check for self-assignment
+    if (this == &other)
+    {
+        return *this;
+    }
+
+    // Delete the current linked list
+    PlaylistNode* currentNode = head;
+    while (currentNode != nullptr)
+    {
+        PlaylistNode* temp = currentNode;
+        currentNode = currentNode->GetNext();
+        delete temp;
+    }
+
+    // Copy the new linked list
+    title = other.title;
+    head = nullptr;
+    tail = head;
+
+    PlaylistNode* otherNode = other.head;
+    while (otherNode != nullptr)
+    {
+        PlaylistNode* newNode = new PlaylistNode(otherNode->GetID(), otherNode->GetSongName(), otherNode->GetArtistName(), otherNode->GetSongLength());
+        if (head == nullptr) //checking if the linked list is empty
+        {
+            tail = newNode;
+            head = tail;
+        }
+        else
+        {
+            tail->InsertAfter(newNode);
+            tail = newNode;
+        }
+        otherNode = otherNode->GetNext();
+    }
+
+    return *this;
+}
+
+
 // This function outputs the full playlist.
 void Playlist::OutputFullPlaylist()
 {
