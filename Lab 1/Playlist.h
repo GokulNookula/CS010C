@@ -49,6 +49,9 @@ class Playlist
         // Parameterized constructor
         Playlist(string playlistTitle);
 
+        //Destructor
+        ~Playlist();
+
         // Output the full playlist
         void OutputFullPlaylist();
 
