@@ -195,7 +195,7 @@ void Playlist::AddSong()
         tail->InsertAfter(newNode); //We call Insert the node at the end and set our new Node as our tail and the new Node points to Null
         tail = newNode;
     }
-
+    delete newNode;
 }
 
 // This function removes a song from the playlist.
@@ -223,6 +223,7 @@ void Playlist::RemoveSong()
             currentNode = previousNode->GetNext(); //Updating the currentNode so we dont have a memory leak
         }
     }
+    delete previousNode;
 }
 
 //This function outputs the total time of all the songs in the playlist
@@ -350,11 +351,10 @@ void Playlist::ChangePosition()
             tail = curr; // ...set the new tail to be the node we just moved.
         }
         cout << "\"" << curr->GetSongName() << "\" moved to position " << newPos << endl;
+        delete previousNewNode;
+        delete currNode;
     }
-    else // If the node doesn't exist, the user's input was invalid.
-    {
-        cout << "Invalid" << endl;
-        return;
-    }
+    delete prev;
+    delete curr;
 }
 
