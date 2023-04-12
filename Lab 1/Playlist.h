@@ -52,6 +52,9 @@ class Playlist
         //Destructor
         ~Playlist();
 
+        //Copy constructor
+        Playlist & operator=(const Playlist&);
+
         // Output the full playlist
         void OutputFullPlaylist();
 
