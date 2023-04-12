@@ -82,6 +82,18 @@ Playlist::Playlist(string newTitle)
     tail = head;
 }
 
+// Destructor for Playlist that deletes all nodes in the linked list
+Playlist::~Playlist()
+{
+    PlaylistNode* currentNode = head;
+    while (currentNode != nullptr)
+    {
+        PlaylistNode* temp = currentNode;
+        currentNode = currentNode->GetNext();
+        delete temp;
+    }
+}
+
 // This function outputs the full playlist.
 void Playlist::OutputFullPlaylist()
 {
