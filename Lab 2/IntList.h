@@ -33,6 +33,8 @@ class IntList
     private:
         IntNode* dummyHead;     // dummy node representing the head of the list
         IntNode* dummyTail;     // dummy node representing the tail of the list
+        IntList(const IntList&) = delete; //Copy Constructor
+        IntList& operator=(const IntList& list) = delete; //Copy Assignment
 };
 
 
