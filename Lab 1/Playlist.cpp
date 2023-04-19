@@ -23,25 +23,25 @@ PlaylistNode::PlaylistNode(string newUniqueID, string newSongName,string newArti
 }
 
 //Accesses the variable uniqueID and returns us the string value
-string PlaylistNode::GetID() const
+const string& PlaylistNode::GetID() const
 {
     return uniqueID;
 }
 
 //Accesses the variable artistName and returns us the string value
-string PlaylistNode::GetArtistName() const
+const string& PlaylistNode::GetArtistName() const
 {
     return artistName;
 }
 
 //Accesses the variable songName and returns us the string value
-string PlaylistNode::GetSongName() const
+const string& PlaylistNode::GetSongName() const
 {
     return songName;
 }
 
 //Accesses the variable songLength and returns us the int value
-int PlaylistNode::GetSongLength() const
+const int& PlaylistNode::GetSongLength() const
 {
     return songLength;
 }
@@ -88,55 +88,11 @@ Playlist::~Playlist()
     PlaylistNode* currentNode = head;
     while (currentNode != nullptr)
     {
-        PlaylistNode* temp = currentNode;
+        PlaylistNode* removeNode = currentNode;
         currentNode = currentNode->GetNext();
-        delete temp;
+        delete removeNode;
     }
 }
-
-// Copy assignment operator for Playlist
-Playlist& Playlist::operator=(const Playlist& other)
-{
-    // Check for self-assignment
-    if (this == &other)
-    {
-        return *this;
-    }
-
-    // Delete the current linked list
-    PlaylistNode* currentNode = head;
-    while (currentNode != nullptr)
-    {
-        PlaylistNode* temp = currentNode;
-        currentNode = currentNode->GetNext();
-        delete temp;
-    }
-
-    // Copy the new linked list
-    title = other.title;
-    head = nullptr;
-    tail = head;
-
-    PlaylistNode* otherNode = other.head;
-    while (otherNode != nullptr)
-    {
-        PlaylistNode* newNode = new PlaylistNode(otherNode->GetID(), otherNode->GetSongName(), otherNode->GetArtistName(), otherNode->GetSongLength());
-        if (head == nullptr) //checking if the linked list is empty
-        {
-            tail = newNode;
-            head = tail;
-        }
-        else
-        {
-            tail->InsertAfter(newNode);
-            tail = newNode;
-        }
-        otherNode = otherNode->GetNext();
-    }
-
-    return *this;
-}
-
 
 // This function outputs the full playlist.
 void Playlist::OutputFullPlaylist()
@@ -195,36 +151,62 @@ void Playlist::AddSong()
         tail->InsertAfter(newNode); //We call Insert the node at the end and set our new Node as our tail and the new Node points to Null
         tail = newNode;
     }
-    delete newNode;
+
 }
 
 // This function removes a song from the playlist.
 void Playlist::RemoveSong()
 {
+    // Ask user to input a unique ID for the song they want to remove
     string userUniqueID;    
-
     cout << "REMOVE SONG" << endl;
     cout << "Enter song's unique ID:" << endl;
     cin >> userUniqueID;
 
-    // Keeping track of the previous node so we dont lose track of our linked list
-    PlaylistNode* previousNode = head;
-
-    //This is used in order to go through the entire linked list 
-    for (PlaylistNode* currentNode = head->GetNext(); currentNode != nullptr; currentNode = currentNode->GetNext())
+    // Check if playlist is empty, if so, return
+    if(head == nullptr)
     {
-        //Checking if the current Node ID matches with our input given by the user
-        if (currentNode->GetID() == userUniqueID)
-        {
-            cout << "\"" << currentNode->GetSongName() << "\" removed." << endl;
-            PlaylistNode* temp = currentNode; //Setting a temporary Node with the currentNode so we can delete it
-            previousNode->SetNext(currentNode->GetNext()); //Updating the previousNode value so we can skip the node that we deleted
-            delete temp; //Deleting the node
-            currentNode = previousNode->GetNext(); //Updating the currentNode so we dont have a memory leak
-        }
+        return;
     }
-    delete previousNode;
+
+    // Keeping track of the previous node so we don't lose track of our linked list
+    PlaylistNode* prev = head;
+
+    // Iterate through the playlist starting from the head node
+    for (PlaylistNode* i = head; i != nullptr; i = i->GetNext())
+    {
+        // If the current node's ID matches the user's input, remove the song and return
+        if (i->GetID() == userUniqueID)
+        {
+            // Output the name of the removed song
+            cout << '"' << i->GetSongName() << '"' << " removed." << endl;
+
+            // Update head and tail if necessary
+            if (i == head) 
+            {
+                head = i->GetNext();
+            }
+            else if (i == tail) 
+            {
+                tail = prev;
+                prev->SetNext(nullptr);
+            }
+            // If the removed node is in the middle of the playlist, connect the previous and next nodes
+            else 
+            {
+                prev->SetNext(i->GetNext());
+            }
+
+            // Delete the removed node and return
+            delete i;
+            return;
+        }
+
+        // If the current node is not the node to remove, update prev to the current node and continue iterating
+        prev = i;
+    }  
 }
+
 
 //This function outputs the total time of all the songs in the playlist
 void Playlist::OutputTotalTime()
@@ -351,10 +333,11 @@ void Playlist::ChangePosition()
             tail = curr; // ...set the new tail to be the node we just moved.
         }
         cout << "\"" << curr->GetSongName() << "\" moved to position " << newPos << endl;
-        delete previousNewNode;
-        delete currNode;
     }
-    delete prev;
-    delete curr;
+    else // If the node doesn't exist, the user's input was invalid.
+    {
+        cout << "Invalid" << endl;
+        return;
+    }
 }
 
