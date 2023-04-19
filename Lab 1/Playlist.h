@@ -23,10 +23,10 @@ class PlaylistNode
         void SetNext(PlaylistNode* node);
 
         // Getter methods for private member variables
-        string GetID() const;
-        string GetArtistName() const;
-        string GetSongName() const;
-        int GetSongLength() const;
+        const string& GetID() const;
+        const string& GetArtistName() const;
+        const string& GetSongName() const;
+        const int& GetSongLength() const;
         PlaylistNode* GetNext() const;
 
         // Print the details of this node
@@ -52,9 +52,6 @@ class Playlist
         //Destructor
         ~Playlist();
 
-        //Copy constructor
-        Playlist & operator=(const Playlist&);
-
         // Output the full playlist
         void OutputFullPlaylist();
 
@@ -79,6 +76,8 @@ class Playlist
         string title;
         PlaylistNode* head;
         PlaylistNode* tail;
+        Playlist (const PlaylistNode&) =  delete; //Copy constructor
+        Playlist &operator=(const Playlist&) = delete; //Copy Assignment
 };
 
 #endif
