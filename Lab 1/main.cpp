@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "Playlist.h" // include the header file that defines the Playlist class
+#include "Playlist.cpp" // include the header file that defines the Playlist class
 
 using namespace std;
 
