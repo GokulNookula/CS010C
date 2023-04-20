@@ -19,6 +19,21 @@ unsigned min_index(const vector<T> &vals, unsigned index)
     return minVal;
 }
 
+template <typename T>
+void selection_sort (vector<T> &vals)
+{
+    for (auto i = 0; i < vals.size(); i++)
+    {
+        T minVal = min_index(vals,i);
+
+        if (vals.at(i) < minVal)
+        {
+            swap (vals.at(i),minVal);
+        }
+
+    }
+}
+
 int main()
 {
     vector<int> test {0,1,2,3};
