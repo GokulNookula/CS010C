@@ -7,28 +7,28 @@ using namespace std;
 template <typename T>
 unsigned min_index(const vector<T> &vals, unsigned index)
 {
-    T minVal = vals.at(index);
+    unsigned minIndex = index;
 
-    for (auto i = index; i < vals.size() - 1; i++)
+    for (auto i = index + 1; i < vals.size() - 1; i++)
     {
-        if (vals.at(i) < minVal)
+        if (vals.at(i) < vals.at(minIndex))
         {
-            minVal = vals.at(i);
+            minIndex = i;
         }
     }
-    return minVal;
+    return minIndex;
 }
 
 template <typename T>
 void selection_sort (vector<T> &vals)
 {
-    for (auto i = 0; i < vals.size(); i++)
+    for (auto i = 0; i < vals.size() - 1; i++)
     {
-        T minVal = min_index(vals,i);
+        unsigned minIndex = min_index(vals,i);
 
-        if (vals.at(i) < minVal)
+        if (minIndex != i)
         {
-            swap (vals.at(i),minVal);
+            swap (vals.at(i),vals.at(minIndex));
         }
 
     }
@@ -36,9 +36,17 @@ void selection_sort (vector<T> &vals)
 
 int main()
 {
-    vector<int> test {0,1,2,3};
+    vector<int> test {90, 76, 1, 54, 20, 2000};
 
-    cout << min_index(test, 1) << endl;
+    cout << "Testing min index where it should return me index 2 and we get: "  << min_index(test, 1) << endl;
+
+    selection_sort(test);
+
+    for (int i = 0; i < test.size();i++)
+    {
+        cout << test.at(i) << " ";
+    }
+    cout << endl;
 
     return 0;
 }
