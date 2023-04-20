@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <stdexcept>
 
 using namespace std;
 
@@ -9,7 +10,7 @@ unsigned min_index(const vector<T> &vals, unsigned index)
 {
     unsigned minIndex = index;
 
-    for (auto i = index + 1; i < vals.size() - 1; i++)
+    for (auto i = index; i < vals.size() - 1; i++)
     {
         if (vals.at(i) < vals.at(minIndex))
         {
@@ -32,6 +33,34 @@ void selection_sort (vector<T> &vals)
         }
 
     }
+}
+
+template <typename T>
+
+T getElement(vector<T> vals, int index)
+{
+    T element;
+
+    for (auto i = 0; i < vals.size() - 1; i++)
+    {
+        try
+        {
+            if (i == index)
+            {
+                element = vals.at(i);
+            }
+            else
+            {
+                throw out_of_range ("out of range exception occured");
+            }
+        }
+        catch(const out_of_range& excpt)
+        {
+            cout << excpt.what() << endl;
+        }
+        
+    }
+    return element;
 }
 
 int main()
