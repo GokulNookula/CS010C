@@ -10,7 +10,7 @@ struct Node {
 };
 
 Node* newNode(string payload) {
-    Node* userNode = new Node();
+    Node* userNode = new Node();    //Creating a new Node
     userNode->payload = payload;
     return userNode;
 
@@ -25,17 +25,15 @@ Node* loadGame(int n, vector<string> names) {
         name = names.at(i);
         if (head == nullptr) {
             head = newNode(name); // initialize head specially
-            /** fill in this code **/
-            prev = head; 
+            prev = head; //Setting the new Head value with to previous
         } else {
             prev->next = newNode(name);
-            /** fill in this code **/
-            prev = prev->next; 
+            prev = prev->next; //We are setting the new node into previous node
         }
     }
 
     if (prev != nullptr) {
-        /** fill in this code **/ // make circular
+        // make circular
         prev->next = head;
     }
     return head;
@@ -57,18 +55,15 @@ Node* runGame(Node* start, int k) { // josephus w circular list, k = num skips
     Node* prev = curr;
     while (curr->next != curr) { // exit condition, last person standing
         for (int i = 0; i < k; ++i) { // find kth node
-          /** fill in this code   
-          **/
-            prev = curr;
-            curr = curr->next;
+            prev = curr;    //Keeping track of the previous node
+            curr = curr->next;  //Iterating through the nodess
 
         }
         curr = prev->next;
         prev->next = curr->next;
-        /** fill in this code **/ // delete kth node
+         // delete kth node
         delete curr;
-        /** fill in this code **/
-        curr = prev->next;
+        curr = prev->next;   //Updating the current node so we dont have a memory leak
     }
 
     return curr; // last person standing
