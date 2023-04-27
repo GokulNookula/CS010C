@@ -37,6 +37,7 @@ class stack
             if (_size > 0)
             {
                 _size--;
+                return;
             }
             throw out_of_range ("Called pop on empty stack.");
         }
@@ -45,6 +46,7 @@ class stack
             if (_size > 1)
             {
                 _size -= 2;
+                return;
             }
             throw out_of_range ("Called pop_two on empty stack.");
         }
