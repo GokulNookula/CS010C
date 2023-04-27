@@ -43,12 +43,21 @@ class stack
         }
         void pop_two()
         {
-            if (_size > 1)
+            if (_size <= 0)
+            {
+                throw out_of_range ("Called pop_two on empty stack.");
+                return;
+            }
+            else if (_size == 1)
+            {
+                throw out_of_range ("Called pop_two on a stack of size 1.");
+                return;
+            }
+            else
             {
                 _size -= 2;
                 return;
             }
-            throw out_of_range ("Called pop_two on empty stack.");
         }
         const T top()
         {
