@@ -32,12 +32,12 @@ void BSTree::insert(const string &newString)
                 {
                     currentNode->left = newNode;
                     newNode->parent = currentNode;
-                    currentNode->add();
+                    // currentNode->add();
                     currentNode = nullptr;
                 }
                 else if (currentNode->left->data == newString)
                 {
-                    currentNode->add();
+                    // currentNode->add();
                     currentNode = nullptr;
                 }
                 else
@@ -53,12 +53,12 @@ void BSTree::insert(const string &newString)
                     {
                         currentNode->right = newNode;
                         newNode->parent = currentNode;
-                        currentNode->add();
+                        // currentNode->add();
                         currentNode = nullptr;
                     }
                     else if (currentNode->right->data == newString)
                     {
-                        currentNode->add();
+                        // currentNode->add();
                         currentNode = nullptr;
                     }
                     else
@@ -195,4 +195,44 @@ int BSTree::HeightHelper(Node* curr) const
             return (rightHeight + 1);
         }
     }
+}
+
+void BSTree::preOrder() const
+{
+    preOrder(root);
+    cout << endl;
+
+}
+
+void BSTree::preOrder(Node* currentNode) const
+{
+    cout << currentNode->data << "(" << currentNode->count << ")" << endl;
+    preOrder(currentNode->left);
+    preOrder(currentNode->right);
+}
+
+void BSTree::postOrder() const
+{
+    postOrder(root);
+    cout << endl;
+}
+
+void BSTree::postOrder(Node* currentNode) const
+{
+    postOrder(currentNode->left);
+    postOrder(currentNode->right);
+    cout << currentNode->data << "(" << currentNode->count << ")" << endl;
+}
+
+void BSTree::inOrder() const
+{
+    inOrder(root);
+    cout << endl;
+}
+
+void BSTree::inOrder(Node* currentNode) const
+{
+    inOrder(currentNode->left);
+    cout << currentNode->data << "(" << currentNode->count << ")" << endl;
+    inOrder(currentNode->right);
 }
