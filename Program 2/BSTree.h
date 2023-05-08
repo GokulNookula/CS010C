@@ -11,6 +11,10 @@ class BSTree {
         Node *root;
         int HeightHelper(Node* curr) const;
         Node* searchRecursive(Node* root, const string& key) const;
+        void preOrder(Node*) const;
+        void postOrder(Node*) const;
+        void inOrder(Node*) const;
+        void RemoveBSTree(Node*);
     public:
         /* Constructors */
         /* Default constructor */
@@ -26,7 +30,7 @@ class BSTree {
          */
         void insert(const string &newString);
         /* Remove a specified string from the tree. 
-           Be sure to maintain all bianry search tree properties. 
+           Be sure to maintain all binary search tree properties. 
            If removing a node with a count greater than 1, just decrement the count, otherwise, 
            if the count is simply 1, remove the node. 
             You MUST follow the remove algorithm shown in the slides and discussed in class or else 
@@ -62,9 +66,9 @@ class BSTree {
            <string> (<count>)
            e.g. goodbye(1), Hello World(3)
            */
-        void preOrder() const;
-        void postOrder() const;
-        void inOrder() const;
+        virtual void preOrder() const;
+        virtual void postOrder() const;
+        virtual void inOrder() const;
 };
 
 #endif // __BSTREE_H__
