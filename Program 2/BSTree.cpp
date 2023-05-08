@@ -17,75 +17,52 @@ void BSTree::RemoveBSTree(Node* victimNode)
 {
     if(victimNode != nullptr)
     {
-        if (victimNode->left != nullptr)
-        {
-            RemoveBSTree(victimNode->left);
-        }
-        if (victimNode->right != nullptr)
-        {
-            RemoveBSTree(victimNode->right);
-        }
+        RemoveBSTree(victimNode->left);
+        RemoveBSTree(victimNode->right);
         delete victimNode;
     }
 }
 
 void BSTree::insert(const string &newString)
 {
-    Node* newNode = new Node(newString);
-    //empty tree check case
+    Node* insertNode = new Node(newString);
+
     if (root == nullptr)
     {
-        root = newNode;
-    }
-    else
-    {
-        Node* currentNode = root;
-        while(currentNode != nullptr)
-        {
-            if (newString < currentNode->data)
-            {
-                if (currentNode->left == nullptr)
-                {
-                    currentNode->left = newNode;
-                    newNode->parent = currentNode;
-                    currentNode->add();
-                    currentNode = nullptr;
-                }
-                else if (currentNode->left->data == newString)
-                {
-                    currentNode->add();
-                    currentNode = nullptr;
-                }
-                else
-                {
-                    currentNode = currentNode->left;
-                }
-            }
-            else
-            {
-                if (currentNode->right == nullptr)
-                {
-                    if (currentNode->right == nullptr)
-                    {
-                        currentNode->right = newNode;
-                        newNode->parent = currentNode;
-                        currentNode->add();
-                        currentNode = nullptr;
-                    }
-                    else if (currentNode->right->data == newString)
-                    {
-                        currentNode->add();
-                        currentNode = nullptr;
-                    }
-                    else
-                    {
-                        currentNode = currentNode->right;
-                    }
-                } 
-            }
-        }
+        root = insertNode;
+        insertNode->parent = nullptr;
+        return;
     }
 
+    Node* currentNode = root;
+    while (currentNode != nullptr)
+    {
+        if (newString < currentNode->data)
+        {
+            if (currentNode->left == nullptr)
+            {
+                currentNode->left = insertNode;
+                insertNode->parent = currentNode;
+                currentNode = nullptr;
+            }
+            currentNode = currentNode->left;
+        }
+        else if (newString > currentNode->data)
+        {
+            if (currentNode->right == nullptr)
+            {
+                currentNode->right = insertNode;
+                insertNode->parent = currentNode;
+                currentNode = nullptr;
+            }
+            currentNode = currentNode->right;
+        }
+        else
+        {
+            currentNode->count++;
+            return;
+        }
+    }
 }
 
 void BSTree::remove(const string &key)
