@@ -1,7 +1,7 @@
 #ifndef NODE_H
 #define NODE_H
 #include <iostream>
-#include <string.h>
+#include <string>
 
 using namespace std;
 
@@ -15,8 +15,6 @@ class Node
         Node* parent;
         Node(const string);
         string getString() const;
-        void add();
-        void sub();
 };
 
 
