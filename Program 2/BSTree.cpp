@@ -90,7 +90,7 @@ void BSTree::remove(const string &key)
         {
             root = nullptr;
         }
-        else if (victimNode->parent->left = victimNode)
+        else if (victimNode->parent->left == victimNode)
         {
             victimNode->parent->left = nullptr;
         }
@@ -107,7 +107,7 @@ void BSTree::remove(const string &key)
         {
             if (victimNode->parent == root)
             {
-                root == victimNode->right;
+                root = victimNode->right;
             }
             else if (victimNode->parent->right == victimNode)
             {
@@ -150,7 +150,7 @@ void BSTree::remove(const string &key)
         successorNode->count = 1;
         remove(successorData);
         victimNode->data = successorData;
-        victimNode->cont = successorCount;
+        victimNode->count = successorCount;
         return;
     }
 }
