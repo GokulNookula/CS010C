@@ -15,13 +15,3 @@ string Node::getString() const
 {
     return data;
 }
-
-void Node::add()
-{
-    count++;
-}
-
-void Node::sub()
-{
-    count--;
-}
