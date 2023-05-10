@@ -11,6 +11,7 @@ class BSTree {
         Node *root;
         int HeightHelper(Node* curr) const;
         Node* searchRecursive(Node* root, const string& key) const;
+        Node* remove(Node*,const string&);
         void preOrder(Node*) const;
         void postOrder(Node*) const;
         void inOrder(Node*) const;
