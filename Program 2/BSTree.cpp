@@ -45,7 +45,10 @@ void BSTree::insert(const string &newString)
                 insertNode->parent = currentNode;
                 currentNode = nullptr;
             }
-            currentNode = currentNode->left;
+            else
+            {
+                currentNode = currentNode->left;
+            }
         }
         else if (newString > currentNode->data)
         {
@@ -55,104 +58,95 @@ void BSTree::insert(const string &newString)
                 insertNode->parent = currentNode;
                 currentNode = nullptr;
             }
-            currentNode = currentNode->right;
+            else
+            {
+                currentNode = currentNode->right;
+            }
         }
         else
         {
-            currentNode->count++;
+            currentNode->count += 1;
             return;
         }
     }
 }
 
-void BSTree::remove(const string &key)
+void BSTree::remove(const string& value)
 {
-    if (root == nullptr)
+    Node* parentNode = nullptr;
+    Node *currentNode = root;
+
+    if (!search(value)) 
     {
         return;
     }
-
-    Node* victimNode = searchRecursive(root, key);
-    if (victimNode == nullptr)
+    while (currentNode != nullptr)
     {
-        return;
-    }
-
-    if (victimNode->count > 1)
-    {
-        victimNode->count--;
-        return;
-    }
-
-    if (victimNode->left == nullptr && victimNode->right == nullptr)
-    {
-        if (victimNode->parent == nullptr)
+        if (currentNode->data == value)
         {
-            root = nullptr;
-        }
-        else if (victimNode->parent->left == victimNode)
-        {
-            victimNode->parent->left = nullptr;
-        }
-        else
-        {
-            victimNode->parent->right = nullptr;
-        }
-        delete victimNode;
-        victimNode = nullptr;
-    }
-    else if (victimNode->right == nullptr)
-    {
-        if (victimNode->right == nullptr)
-        {
-            if (victimNode->parent == root)
+            if (currentNode->count > 1) 
             {
-                root = victimNode->right;
+                currentNode->count -= 1;
             }
-            else if (victimNode->parent->right == victimNode)
+            else if ((currentNode->left == nullptr) && (currentNode->right == nullptr))
             {
-                victimNode->parent->left = victimNode->left;
+                if (parentNode == nullptr)
+                {
+                    root = nullptr;
+                }
+                else if (parentNode->left == currentNode)
+                {
+                    parentNode->left = nullptr;
+                }
+                else
+                {
+                    parentNode->right = nullptr;
+                }
+            }
+            else if (currentNode->left == nullptr)
+            {
+                if (parentNode == nullptr)
+                {
+                    root = currentNode->right;
+                }
+                else
+                {
+                    Node* sucessorNode = currentNode->right;
+                    while (sucessorNode->left != nullptr)
+                    {
+                        sucessorNode = sucessorNode->left;
+                    }
+                    string removeData = sucessorNode->data;
+                    remove(removeData);
+                    currentNode->data = removeData;
+                }
             }
             else
             {
-                victimNode->parent->right = victimNode->left;
+                Node* sucessorNode = currentNode->left;
+                while(sucessorNode->right != nullptr)
+                {
+                    sucessorNode = sucessorNode->right;
+                }
+                string removeData = sucessorNode->data;
+                remove(removeData);
+                currentNode->data = removeData;
             }
-            delete victimNode;
-            victimNode = nullptr;
+            return;
         }
-    }
-    else if (victimNode->left == nullptr)
-    {
-        if (victimNode->parent == nullptr)
+        else if (currentNode->data < value)
         {
-            root = victimNode->right;
-        }
-        else if (victimNode->parent->left == victimNode)
-        {
-            victimNode->parent->left = victimNode->right;
+            parentNode = currentNode;
+            currentNode = currentNode->right;
         }
         else
         {
-            victimNode->parent->right = victimNode->right;
+            parentNode = currentNode;
+            currentNode = currentNode->left;
         }
-        delete victimNode;
-        victimNode = nullptr;
     }
-    else
-    {
-        Node* successorNode = victimNode->right;
-        while (successorNode->left != nullptr)
-        {
-            successorNode = successorNode->left;
-        }
-        string successorData = successorNode->data;
-        int successorCount = successorNode->count;
-        successorNode->count = 1;
-        remove(successorData);
-        victimNode->data = successorData;
-        victimNode->count = successorCount;
-        return;
-    }
+    return;
+    
 }
 
 bool BSTree::search(const string &key) const
@@ -216,7 +210,7 @@ string BSTree::largest() const
             {
                 maxVal = currentNode->data;
             }
-            currentNode = currentNode->left;
+            currentNode = currentNode->right;
         }
     }
     return maxVal;
@@ -249,8 +243,15 @@ string BSTree::smallest() const
 
 int BSTree::height(const string& key) const
 {
-    Node* currentNode = new Node(key);
-    return HeightHelper(currentNode);
+    Node* currentNode = searchRecursive(root,key);
+    if (currentNode == nullptr)
+    {
+        return -1;
+    }
+    else
+    {
+        return HeightHelper(currentNode);
+    }
 }
 
 int BSTree::HeightHelper(Node* curr) const
@@ -259,58 +260,53 @@ int BSTree::HeightHelper(Node* curr) const
     {
         return -1;
     }
-    else
-    {
-        int leftHeight = HeightHelper(curr->left);
-        int rightHeight = HeightHelper(curr->right);
-
-        if (leftHeight > rightHeight)
-        {
-            return (leftHeight + 1);
-        }
-        else
-        {
-            return (rightHeight + 1);
-        }
-    }
+    int leftHeight = HeightHelper(curr->left);
+    int rightHeight = HeightHelper(curr->right);
+    return 1 + max(leftHeight,rightHeight); 
 }
 
 void BSTree::preOrder() const
 {
     preOrder(root);
-    cout << endl;
 
 }
 
 void BSTree::preOrder(Node* currentNode) const
 {
-    cout << currentNode->data << "(" << currentNode->count << ")" << endl;
-    preOrder(currentNode->left);
-    preOrder(currentNode->right);
+    if (currentNode != nullptr)
+    {
+        cout << currentNode->data << "(" << currentNode->count << "), ";
+        preOrder(currentNode->left);
+        preOrder(currentNode->right);
+    }
 }
 
 void BSTree::postOrder() const
 {
     postOrder(root);
-    cout << endl;
 }
 
 void BSTree::postOrder(Node* currentNode) const
 {
-    postOrder(currentNode->left);
-    postOrder(currentNode->right);
-    cout << currentNode->data << "(" << currentNode->count << ")" << endl;
+    if (currentNode != nullptr)
+    {
+        postOrder(currentNode->left);
+        postOrder(currentNode->right);
+        cout << currentNode->data << "(" << currentNode->count << "), ";
+    }
 }
 
 void BSTree::inOrder() const
 {
     inOrder(root);
-    cout << endl;
 }
 
 void BSTree::inOrder(Node* currentNode) const
 {
-    inOrder(currentNode->left);
-    cout << currentNode->data << "(" << currentNode->count << ")" << endl;
-    inOrder(currentNode->right);
+    if (currentNode != nullptr)
+    {
+        inOrder(currentNode->left);
+        cout << currentNode->data << "(" << currentNode->count << "), ";
+        inOrder(currentNode->right);
+    }
 }
